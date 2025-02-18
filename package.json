@@ -2,23 +2,34 @@
   "name": "vpnfrontend",
   "license": "0BSD",
   "version": "1.0.0",
-  "main": "src/App.js",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "npx expo start",
-    "android": "npx expo start --android",
-    "ios": "npx expo start --ios",
-    "web": "npx expo start --web",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
     "doctor": "npx expo-doctor"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "react-native-sqlite-storage"
+        ]
+      }
+    }
   },
   "dependencies": {
     "@babel/plugin-transform-nullish-coalescing-operator": "^7.26.6",
     "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-navigation/elements": "^2.2.5",
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/native-stack": "^7.2.0",
     "@react-navigation/stack": "^7.1.1",
     "axios": "^1.6.2",
     "base64-js": "^1.5.1",
     "expo": "~52.0.35",
+    "expo-asset": "~11.0.3",
     "expo-status-bar": "~2.0.1",
     "lodash": "^4.17.21",
     "react": "18.3.1",
@@ -30,7 +41,8 @@
     "react-native-sqlite-storage": "^6.0.1",
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.2.0",
-    "react-native-web": "^0.19.13"
+    "react-native-web": "^0.19.13",
+    "redux": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -47,7 +59,8 @@
         "exclude": [
           "@babel/plugin-transform-nullish-coalescing-operator",
           "base64-js",
-          "lodash"
+          "lodash",
+          "react-native-sqlite-storage"
         ],
         "listUnknownPackages": false
       }

@@ -8,31 +8,31 @@ import Toast from 'react-native-root-toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 导入页面组件
-import AuthScreen from './screens/AuthScreen';
-import NodeListScreen from './screens/NodeListScreen';
-import RegisterScreen from './screens/RegisterScreen';
+import AuthScreen from './screens/AuthScreen'; // 登录页面
+import NodeListScreen from './screens/NodeListScreen'; // 节点列表页面
+import RegisterScreen from './screens/RegisterScreen'; // 注册页面
 
 // 初始化数据库
 const db = SQLite.openDatabase(
   { name: 'vpnapp.db', location: 'default' },
-  () => console.log('Database connected'),
-  error => console.error('Database error', error)
+  () => console.log('Database connected'), // 数据库连接成功时的回调
+  error => console.error('Database error', error) // 数据库连接失败时的回调
 );
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator(); // 创建导航栈
 
 export default function App() {
-  // 全局认证状态
+  // 全局认证状态管理
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'SIGN_IN':
+        case 'SIGN_IN': // 登录操作
           return {
             ...prevState,
             isSignout: false,
             userToken: action.token,
           };
-        case 'SIGN_OUT':
+        case 'SIGN_OUT': // 登出操作
           return {
             ...prevState,
             isSignout: true,
@@ -41,9 +41,9 @@ export default function App() {
       }
     },
     {
-      isLoading: true,
-      isSignout: false,
-      userToken: null,
+      isLoading: true, // 初始加载状态
+      isSignout: false, // 是否已登出
+      userToken: null, // 用户令牌
     }
   );
 
@@ -55,7 +55,7 @@ export default function App() {
         const userToken = await AsyncStorage.getItem('userToken');
         dispatch({ type: 'SIGN_IN', token: userToken });
       } catch (e) {
-        console.warn('Auth state recovery failed');
+        console.warn('Auth state recovery failed'); // 认证状态恢复失败
       }
     };
 
@@ -65,12 +65,12 @@ export default function App() {
   // 认证上下文方法
   const authContext = React.useMemo(
     () => ({
-      signIn: async (token) => {
-        await AsyncStorage.setItem('userToken', token);
+      signIn: async (token) => { // 登录方法
+        await AsyncStorage.setItem('userToken', token); // 存储用户令牌
         dispatch({ type: 'SIGN_IN', token });
       },
-      signOut: async () => {
-        await AsyncStorage.removeItem('userToken');
+      signOut: async () => { // 登出方法
+        await AsyncStorage.removeItem('userToken'); // 移除用户令牌
         dispatch({ type: 'SIGN_OUT' });
       },
     }),
@@ -86,7 +86,7 @@ export default function App() {
       background: '#121212', // 深色背景
       text: '#FFFFFF', // 白色文字
     },
-    dark: true,
+    dark: true, // 启用深色模式
   };
 
   return (
@@ -96,18 +96,20 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               headerStyle: {
-                backgroundColor: theme.colors.background,
+                backgroundColor: theme.colors.background, // 导航栏背景色
               },
-              headerTintColor: theme.colors.text,
+              headerTintColor: theme.colors.text, // 导航栏文字颜色
             }}
           >
             {state.userToken ? (
+              // 如果用户已登录，显示节点列表页面
               <Stack.Screen
                 name="NodeList"
                 component={NodeListScreen}
                 options={{ title: '节点列表' }}
               />
             ) : (
+              // 如果用户未登录，显示登录和注册页面
               <>
                 <Stack.Screen
                   name="Auth"
@@ -123,7 +125,7 @@ export default function App() {
             )}
           </Stack.Navigator>
         </NavigationContainer>
-        <Toast />
+        <Toast /> {/* 全局Toast提示组件 */}
       </AuthContext.Provider>
     </PaperProvider>
   );

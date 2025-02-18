@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '../store'; // 假设store文件路径为../store
+import store from '../store';
 import { API_BASE_URL } from '../config'; // 引入 API_BASE_URL
 
 // 设置 JWT token 并配置 axios 拦截器
